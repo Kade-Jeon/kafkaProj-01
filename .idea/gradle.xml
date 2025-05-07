@@ -7,9 +7,12 @@
         <option name="delegatedBuild" value="false" />
         <option name="testRunner" value="PLATFORM" />
         <option name="externalProjectPath" value="$PROJECT_DIR$" />
+        <option name="gradleJvm" value="17 (2)" />
         <option name="modules">
           <set>
             <option value="$PROJECT_DIR$" />
+            <option value="$PROJECT_DIR$/consumer" />
+            <option value="$PROJECT_DIR$/consumers" />
             <option value="$PROJECT_DIR$/producers" />
           </set>
         </option>

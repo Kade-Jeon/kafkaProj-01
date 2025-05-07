@@ -1,6 +1,10 @@
 package com.example.kafka;
 
 import com.github.javafaker.Faker;
+import java.util.HashMap;
+import java.util.Properties;
+import java.util.Random;
+import java.util.concurrent.ExecutionException;
 import org.apache.kafka.clients.producer.KafkaProducer;
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.clients.producer.ProducerRecord;
@@ -9,13 +13,8 @@ import org.apache.kafka.common.serialization.StringSerializer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.HashMap;
-import java.util.Properties;
-import java.util.Random;
-import java.util.concurrent.ExecutionException;
-
-public class PizzaProducer {
-    public static final Logger logger = LoggerFactory.getLogger(PizzaProducer.class);
+public class PizzaProducerWithCustomPartitioner {
+    public static final Logger logger = LoggerFactory.getLogger(PizzaProducerWithCustomPartitioner.class);
 
     public static void sendPiazzaMessage (KafkaProducer<String, String> kafkaProducer,
                                           String topicName, int iterCount,
@@ -78,24 +77,21 @@ public class PizzaProducer {
     }
 
     public static void main(String[] args) {
-        String topicName = "pizza-topic";
+        String topicName = "pizza-topic-partitioner";
         //KafkaProducer Configuration Setting
         Properties props = new Properties();
         props.setProperty(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092");
         props.setProperty(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class.getName());
         props.setProperty(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, StringSerializer.class.getName());
-        //props.setProperty(ProducerConfig.ACKS_CONFIG, "0");
-        //props.setProperty(ProducerConfig.BATCH_SIZE_CONFIG, "32000");
-        //props.setProperty(ProducerConfig.LINGER_MS_CONFIG, "20");
-        //props.setProperty(ProducerConfig.MAX_IN_FLIGHT_REQUESTS_PER_CONNECTION, "6");
-        //props.setProperty(ProducerConfig.ACKS_CONFIG, "0");
-        //props.setProperty(ProducerConfig.ENABLE_IDEMPOTENCE_CONFIG, "true");
+
+        props.setProperty("custom.specialKey", "P001");
+        props.setProperty(ProducerConfig.PARTITIONER_CLASS_CONFIG,"com.example.kafka.CustomPartitioner");
 
         // KafkaProducer 객체 생성 <키, 밸류>
         KafkaProducer<String, String> kafkaProducer = new KafkaProducer<>(props);
 
         sendPiazzaMessage(kafkaProducer, topicName,
-                -1, 5000, 0, 0, true);
+                -1, 100, 0, 0, true);
 
         kafkaProducer.close();
     }
