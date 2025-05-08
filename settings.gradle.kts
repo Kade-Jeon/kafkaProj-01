@@ -3,3 +3,4 @@ include("producers")
 
 include("consumers")
 include("consumer")
+include("practice")

@@ -6,15 +6,17 @@ import java.util.Properties;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.clients.consumer.ConsumerRecords;
+import org.apache.kafka.clients.consumer.CooperativeStickyAssignor;
 import org.apache.kafka.clients.consumer.KafkaConsumer;
+import org.apache.kafka.clients.consumer.RoundRobinAssignor;
 import org.apache.kafka.common.errors.WakeupException;
 import org.apache.kafka.common.serialization.StringDeserializer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class ConsumerWakeUp {
+public class ConsumerMtopicRebalance {
 
-    public static final Logger logger = LoggerFactory.getLogger(ConsumerWakeUp.class);
+    public static final Logger logger = LoggerFactory.getLogger(ConsumerMtopicRebalance.class);
 
     public static void main(String[] args) {
 
@@ -25,12 +27,12 @@ public class ConsumerWakeUp {
         props.setProperty(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092");
         props.setProperty(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class.getName());
         props.setProperty(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class.getName());
-        //props.setProperty(ConsumerConfig.GROUP_ID_CONFIG, "group_01");
-        props.setProperty(ConsumerConfig.GROUP_ID_CONFIG, "group_01_static");
-        props.setProperty(ConsumerConfig.GROUP_INSTANCE_ID_CONFIG, "3");
+        props.setProperty(ConsumerConfig.GROUP_ID_CONFIG, "group-assign");
+        props.setProperty(ConsumerConfig.PARTITION_ASSIGNMENT_STRATEGY_CONFIG, CooperativeStickyAssignor.class.getName());
+
 
         KafkaConsumer<String, String> kafkaConsumer = new KafkaConsumer<>(props);
-        kafkaConsumer.subscribe(List.of(topicName));
+        kafkaConsumer.subscribe(List.of("topic-p3-t1", "topic-p3-t2"));
 
         // main Thread 참조 변수
         Thread mainTread = Thread.currentThread();
@@ -55,8 +57,8 @@ public class ConsumerWakeUp {
             while (true) {
                 ConsumerRecords<String, String> consumerRecords = kafkaConsumer.poll(Duration.ofMillis(1000));// 가져올 데이터가 없다면! 최대 1초동안 기다림. 만약 있다면 바로 가져옴
                 for (ConsumerRecord<String, String> record : consumerRecords) {
-                    logger.info("[CONSUMER] Key: {},  Partition: {}, Offset: {}, Value: {},",
-                            record.key(), record.partition(), record.offset(), record.value());
+                    logger.info("[CONSUMER] Topic: {}, Key: {},  Partition: {}, Offset: {}, Value: {},",
+                            record.topic() ,record.key(), record.partition(), record.offset(), record.value());
                 }
             }
         } catch (WakeupException e) {

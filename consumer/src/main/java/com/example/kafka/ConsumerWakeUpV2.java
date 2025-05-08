@@ -12,9 +12,9 @@ import org.apache.kafka.common.serialization.StringDeserializer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class ConsumerWakeUp {
+public class ConsumerWakeUpV2 {
 
-    public static final Logger logger = LoggerFactory.getLogger(ConsumerWakeUp.class);
+    public static final Logger logger = LoggerFactory.getLogger(ConsumerWakeUpV2.class);
 
     public static void main(String[] args) {
 
@@ -25,9 +25,8 @@ public class ConsumerWakeUp {
         props.setProperty(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092");
         props.setProperty(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class.getName());
         props.setProperty(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class.getName());
-        //props.setProperty(ConsumerConfig.GROUP_ID_CONFIG, "group_01");
-        props.setProperty(ConsumerConfig.GROUP_ID_CONFIG, "group_01_static");
-        props.setProperty(ConsumerConfig.GROUP_INSTANCE_ID_CONFIG, "3");
+        props.setProperty(ConsumerConfig.GROUP_ID_CONFIG, "group_02");
+        props.setProperty(ConsumerConfig.MAX_POLL_INTERVAL_MS_CONFIG, "60000");
 
         KafkaConsumer<String, String> kafkaConsumer = new KafkaConsumer<>(props);
         kafkaConsumer.subscribe(List.of(topicName));
@@ -51,12 +50,23 @@ public class ConsumerWakeUp {
 
         });
 
+
+        int loopCnt = 0;
         try {
             while (true) {
                 ConsumerRecords<String, String> consumerRecords = kafkaConsumer.poll(Duration.ofMillis(1000));// 가져올 데이터가 없다면! 최대 1초동안 기다림. 만약 있다면 바로 가져옴
+                logger.info("##### loopCnt: {}, consumerRecords: {}", loopCnt++, consumerRecords.count());
+
                 for (ConsumerRecord<String, String> record : consumerRecords) {
                     logger.info("[CONSUMER] Key: {},  Partition: {}, Offset: {}, Value: {},",
                             record.key(), record.partition(), record.offset(), record.value());
+                }
+
+                try {
+                    logger.info("main thread is sleeping {}ms during whilte loop", loopCnt * 10000);
+                    Thread.sleep( loopCnt * 10000L);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
                 }
             }
         } catch (WakeupException e) {
