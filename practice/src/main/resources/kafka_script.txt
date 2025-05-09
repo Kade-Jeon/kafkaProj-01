@@ -352,5 +352,6 @@ kafka-topics --bootstrap-server localhost:9092 --delete --topic pizza-topic
 
 kafka-topics --bootstrap-server localhost:9092 --create --topic file-topic
 kafka-topics --bootstrap-server localhost:9092 --delete --topic file-topic
+kafka-topics --bootstrap-server localhost:9092 --describe --topic file-topic
 
 kafka-console-consumer --bootstrap-server localhost:9092 --group group-file --topic file-topic --property print.key=true --property print.value=true --from-beginning

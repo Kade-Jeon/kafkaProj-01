@@ -14,6 +14,7 @@ dependencies {
     implementation("org.slf4j:slf4j-api:1.7.36")
     implementation("org.slf4j:slf4j-simple:1.7.36")
     implementation("com.github.javafaker:javafaker:1.0.2")
+    implementation("org.postgresql:postgresql:42.4.0")
 }
 
 tasks.test {

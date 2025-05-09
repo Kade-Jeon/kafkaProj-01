@@ -16,8 +16,8 @@ public class FileAppendProducer {
     public static final Logger logger = LoggerFactory.getLogger(FileAppendProducer.class);
     public static void main(String[] args) {
         String topicName = "file-topic";
-        //String filePath = "C:\\Users\\crinity\\Documents\\study\\kafka-core\\kafkaProj-01\\practice\\src\\main\\resources\\pizza_sample.txt"; // Window
-        String filePath = "/Users/kade/Documents/kafkaProj-01/practice/src/main/resources/pizza_append.txt"; // MAC
+        String filePath = "C:\\Users\\crinity\\Documents\\study\\kafka-core\\kafkaProj-01\\practice\\src\\main\\resources\\pizza_append.txt"; // Window
+        //String filePath = "/Users/kade/Documents/kafkaProj-01/practice/src/main/resources/pizza_append.txt"; // MAC
 
         Properties props = new Properties();
         props.setProperty(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092");
