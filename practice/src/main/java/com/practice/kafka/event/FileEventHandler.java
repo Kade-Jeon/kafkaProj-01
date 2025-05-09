@@ -57,7 +57,7 @@ public class FileEventHandler implements EventHandler {
     }
 
     public static void main(String[] args) throws Exception {
-        String topicName = "file-topic";
+        String topicName = "file-topic1";
 
         Properties props = new Properties();
         props.setProperty(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092");

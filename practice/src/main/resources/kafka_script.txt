@@ -230,6 +230,9 @@ create table orders
   user_name varchar(100), phone_number varchar(100),
   address varchar(200), order_time timestamp);
 
+select count(*) from orders;
+
+select * from orders;
 
 #############################################################
 #  멀티 노드(브로커)에서 멀티 파티션 및 다중 복제 토픽 생성                   #

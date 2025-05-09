@@ -18,7 +18,7 @@ public class FileProducer {
     public static final Logger logger = LoggerFactory.getLogger(FileProducer.class);
 
     public static void main(String[] args) {
-        String topicName = "file-topic";
+        String topicName = "file-topic1";
         String filePath = "C:\\Users\\crinity\\Documents\\study\\kafka-core\\kafkaProj-01\\practice\\src\\main\\resources\\pizza_sample.txt"; //window
 
         Properties props = new Properties();

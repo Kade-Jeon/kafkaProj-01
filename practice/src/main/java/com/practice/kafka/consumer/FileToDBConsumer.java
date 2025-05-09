@@ -67,10 +67,17 @@ public class FileToDBConsumer<K extends Serializable, V extends Serializable> {
 
 
     private void processRecords(ConsumerRecords<K, V> records) throws Exception{
-
+        List<OrderDTO> orders = makeOrders(records);
+        this.orderDBHandler.insertOrders(orders);
     }
 
     private List<OrderDTO> makeOrders(ConsumerRecords<K,V> records) throws Exception {
+        List<OrderDTO> orders = new ArrayList<>();
+        for (ConsumerRecord<K, V> record : records) {
+            OrderDTO orderDTO = makeOrderDTO(record);
+            orders.add(orderDTO);
+        }
+        return orders;
     }
 
 
@@ -148,16 +155,16 @@ public class FileToDBConsumer<K extends Serializable, V extends Serializable> {
     }
 
     public static void main(String[] args) {
-        String topicName = "file-topic";
+        String topicName = "file-topic1";
 
         Properties props = new Properties();
-        props.setProperty(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, "192.168.56.101:9092");
+        props.setProperty(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092");
         props.setProperty(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class.getName());
         props.setProperty(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class.getName());
         props.setProperty(ConsumerConfig.GROUP_ID_CONFIG, "file-group");
         props.setProperty(ConsumerConfig.ENABLE_AUTO_COMMIT_CONFIG, "false");
 
-        String url = "jdbc:postgresql://192.168.56.101:5432/postgres";
+        String url = "jdbc:postgresql://localhost:3306/postgres";
         String user = "postgres";
         String password = "postgres";
         OrderDBHandler orderDBHandler = new OrderDBHandler(url, user, password);
@@ -167,7 +174,7 @@ public class FileToDBConsumer<K extends Serializable, V extends Serializable> {
         fileToDBConsumer.initConsumer();
         String commitMode = "async";
 
-        fileToDBConsumer.pollConsumes(1000, commitMode);
+        fileToDBConsumer.pollConsumes(100, commitMode);
 
     }
 

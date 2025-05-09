@@ -108,7 +108,7 @@ public class BaseConsumer<K extends Serializable, V extends Serializable> {
     }
 
     public static void main(String[] args) {
-        String topicName = "file-topic";
+        String topicName = "file-topic1";
 
         Properties props = new Properties();
         props.setProperty(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092");
