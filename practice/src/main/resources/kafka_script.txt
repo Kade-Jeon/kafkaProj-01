@@ -246,6 +246,7 @@ kafka-console-producer --bootstrap-server localhost:9092 --topic topic-p3r3
 
 3. dump를 이용하여 Leader와 Follower 파티션에 전송된 메시지를 읽어보기
 kafka-dump-log --deep-iteration --print-data-log --files ~/data/kafka-logs-0?/topic-p3r3-?/00000000000000000000.log
+kafka-dump-log --deep-iteration --print-data-log --files /tmp/kafka-logs-01/topic-p3r3-0/00000000000000000000.log
 
 4. replication factor 4인 토픽 생성(에러 발생)
 kafka-topics --bootstrap-server localhost:9092 --create --topic topic-p3r4 --partitions 3 --replication-factor 4
@@ -257,6 +258,9 @@ kafka-topics --bootstrap-server localhost:9092 --create --topic topic-p3r2 --par
 kafka-topics --bootstrap-server localhost:9092 --create --topic topic-p2r3 --partitions 2 --replication-factor 3
 
 
+kafka-topics --bootstrap-server localhost:9092 --create --topic pizza-topic-p3r3 --partitions 3 --replication-factor 3
+kafka-topics --bootstrap-server localhost:9092 --delete --topic pizza-topic-p3r3
+kafka-topics --bootstrap-server localhost:9092 --describe --topic pizza-topic-p3r3
 
 #############################################################
 #  kafka segment와 roll관련 파라미터                              #

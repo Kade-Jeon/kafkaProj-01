@@ -78,10 +78,11 @@ public class PizzaProducer {
     }
 
     public static void main(String[] args) {
-        String topicName = "pizza-topic";
+        String topicName = "pizza-topic-p3r3";
         //KafkaProducer Configuration Setting
         Properties props = new Properties();
-        props.setProperty(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092");
+        //props.setProperty(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092");
+        props.setProperty(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092,localhost:9093,localhost:9094"); // 멀티
         props.setProperty(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class.getName());
         props.setProperty(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, StringSerializer.class.getName());
         //props.setProperty(ProducerConfig.ACKS_CONFIG, "0");
