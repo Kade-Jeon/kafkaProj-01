@@ -16,7 +16,7 @@ dependencies {
     implementation("com.github.javafaker:javafaker:1.0.2")
     implementation("org.postgresql:postgresql:42.4.0")
     implementation("com.fasterxml.jackson.core:jackson-databind:2.13.3")
-    implementation("com.fasterxml.jackson.core:jackson-datatype-jsr310:2.13.3")
+    implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.13.3")
 }
 
 tasks.test {
